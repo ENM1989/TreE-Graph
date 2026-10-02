@@ -153,6 +153,12 @@ Generated plots:
 - `examples/decision_tree_confusion_matrix.png`: Confusion matrices verifying identical classification boundaries.
 - `examples/decision_tree_roc_curves.png`: Multi-class ROC curves.
 
+### Decision Tree Comparison Example (Titanic Dataset)
+
+Below is the comparison plot generated for the Titanic dataset, showing the original decision tree (15 nodes) simplified down to 11 nodes while preserving identical predictions:
+
+![Decision Tree Simplification Comparison - Titanic Dataset](examples/titanic_decision_tree_comparison.png)
+
 ---
 
 ## Development
