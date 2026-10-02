@@ -32,3 +32,5 @@ CLAUDE_TODO.md
 
 # Examples generated output
 examples/*.png
+!examples/titanic_decision_tree_comparison.png
+
