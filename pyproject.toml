@@ -1,0 +1,137 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tree-graph"
+version = "0.1.0"
+description = "Simplify scikit-learn decision trees using egglog e-graphs"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "TreE-Graph Contributors"}
+]
+keywords = [
+    "decision-trees",
+    "e-graphs",
+    "egglog",
+    "scikit-learn",
+    "tree-simplification",
+    "machine-learning",
+    "compiler-optimization"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "scikit-learn>=1.0",
+    "egglog>=7.0",
+    "numpy>=1.21",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0",
+]
+viz = [
+    "matplotlib>=3.5",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0",
+    "pyright>=1.1.0",
+]
+viz = [
+    "matplotlib>=3.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/tree-graph/tree-graph"
+Repository = "https://github.com/tree-graph/tree-graph"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tree_graph"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+combine-as-imports = false
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+ignore = ["F403", "F405"]  # Wildcard imports are required for egglog DSL
+extend-select = ["ANN401"]  # Forbid Any type
+
+[tool.ruff.lint.per-file-ignores]
+"src/tree_graph/rule_set.py" = ["F403", "F405"]
+"src/tree_graph/tree.py" = ["F403", "F405"]
+"src/tree_graph/condition.py" = ["F403", "F405"]
+"src/tree_graph/tree_simplifier.py" = ["N803"]  # X parameter name is sklearn convention
+"src/tree_graph/__init__.py" = ["F401"]  # Re-exports are intentional
+"src/__init__.py" = ["F401"]  # Re-exports are intentional
+"examples/__init__.py" = ["F401"]  # Re-exports are intentional
+"examples/decision_tree.py" = ["N803", "N806", "E402"]  # X_train, y_test conventions and sys.path setup
+"examples/tree_visualizer.py" = ["N803", "E501"]  # X_test is sklearn convention, long plot lines
+"examples/metrics_calculator.py" = ["E501"]  # Long lines in docstrings
+"tests/*.py" = ["N803", "N806"]  # X, y, X_train, y_test are sklearn conventions
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_ignores = false
+disallow_untyped_defs = true
+disable_error_code = ["empty-body"]
+ignore_missing_imports = true
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disable_error_code = ["no-untyped-def"]
+
+[tool.pyright]
+pythonVersion = "3.10"
+typeCheckingMode = "standard"
+reportMissingTypeStubs = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
+reportUnknownMemberType = false
+reportUnknownArgumentType = false
+reportIncompatibleMethodOverride = false
+reportAttributeAccessIssue = false
+reportWildcardImportFromLibrary = false
+# egglog DSL uses dynamic symbols that pyright can't statically analyze
+reportMissingImports = "none"
+reportUndefinedVariable = "none"
+reportGeneralTypeIssues = "none"
+reportCallIssue = "none"
+reportOptionalCall = "none"
+reportArgumentType = "none"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v --tb=short"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
